@@ -19,14 +19,34 @@ public class ListaNotasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_notas);
 
+        List<Nota> listaNotas = mockarNotas();
+        configurarRecyclerView(listaNotas);
+    }
+
+    private void configurarRecyclerView(List<Nota> listaNotas) {
+        RecyclerView listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
+        definirAdapter(listaNotas, listaNotasRecyclerView);
+        definirLayoutManager(listaNotasRecyclerView);
+    }
+
+    private void definirLayoutManager(RecyclerView listaNotasRecyclerView) {
+        listaNotasRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void definirAdapter(List<Nota> listaNotas, RecyclerView listaNotasRecyclerView) {
+        listaNotasRecyclerView.setAdapter(new ListaNotasAdapter(this, listaNotas));
+    }
+
+    private List<Nota> mockarNotas() {
         NotaDAO notaDAO = new NotaDAO();
+        inserirNotasAleatorias(notaDAO);
+
+        return notaDAO.todos();
+    }
+
+    private void inserirNotasAleatorias(NotaDAO notaDAO) {
         for (int i = 1; i <= 10000; i++)  {
             notaDAO.insere(new Nota("Titulo " + i, "Descricao " + i));
         }
-        List<Nota> listaNotas = notaDAO.todos();
-
-        RecyclerView listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
-        listaNotasRecyclerView.setAdapter(new ListaNotasAdapter(this, listaNotas));
-        listaNotasRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
