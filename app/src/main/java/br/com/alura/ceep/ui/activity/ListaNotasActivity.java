@@ -26,11 +26,6 @@ public class ListaNotasActivity extends AppCompatActivity {
     private void configurarRecyclerView(List<Nota> listaNotas) {
         RecyclerView listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
         definirAdapter(listaNotas, listaNotasRecyclerView);
-        definirLayoutManager(listaNotasRecyclerView);
-    }
-
-    private void definirLayoutManager(RecyclerView listaNotasRecyclerView) {
-        listaNotasRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void definirAdapter(List<Nota> listaNotas, RecyclerView listaNotasRecyclerView) {
