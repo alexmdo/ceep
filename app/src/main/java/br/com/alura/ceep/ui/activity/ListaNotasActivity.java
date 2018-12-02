@@ -2,6 +2,7 @@ package br.com.alura.ceep.ui.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ListaNotasActivity extends AppCompatActivity {
         List<Nota> listaNotas = notaDAO.todos();
 
         RecyclerView listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
-        listaNotasRecyclerView.setAdapter(new ListaNotasAdapter(listaNotas));
+        listaNotasRecyclerView.setAdapter(new ListaNotasAdapter(this, listaNotas));
+        listaNotasRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
