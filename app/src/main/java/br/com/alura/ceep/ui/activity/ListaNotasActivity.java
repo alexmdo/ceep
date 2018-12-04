@@ -31,7 +31,7 @@ public class ListaNotasActivity extends AppCompatActivity {
         insereNotas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent irParaFormularioNotaActivity = new Intent(this, FormularioNotaActivity.class);
+                Intent irParaFormularioNotaActivity = new Intent(ListaNotasActivity.this, FormularioNotaActivity.class);
                 startActivity(irParaFormularioNotaActivity);
             }
         });
