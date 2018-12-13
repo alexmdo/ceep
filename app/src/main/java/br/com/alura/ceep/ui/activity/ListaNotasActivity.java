@@ -36,7 +36,16 @@ public class ListaNotasActivity extends AppCompatActivity {
             }
         });
 
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        NotaDAO notaDAO = new NotaDAO();
+        List<Nota> todasNotas = notaDAO.todos();
+
+        configurarRecyclerView(todasNotas);
     }
 
     private void configurarRecyclerView(List<Nota> listaNotas) {
@@ -56,7 +65,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void inserirNotasAleatorias(NotaDAO notaDAO) {
-        for (int i = 1; i <= 10000; i++)  {
+        for (int i = 1; i <= 2; i++)  {
             notaDAO.insere(new Nota("Titulo " + i, "Descricao " + i));
         }
     }
