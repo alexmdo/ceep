@@ -2,6 +2,7 @@ package br.com.alura.ceep.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.List;
 
 import br.com.alura.ceep.R;
@@ -19,12 +21,15 @@ import br.com.alura.ceep.recyclerview.adapter.ListaNotasAdapter;
 
 public class ListaNotasActivity extends AppCompatActivity {
 
+    private ListaNotasAdapter listaNotasAdapter;
+    private List<Nota> listaNotas;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_notas);
 
-        List<Nota> listaNotas = mockarNotas();
+        listaNotas = mockarNotas();
         configurarRecyclerView(listaNotas);
 
         TextView insereNotas = findViewById(R.id.lista_notas_insere_nota);
@@ -32,20 +37,25 @@ public class ListaNotasActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent irParaFormularioNotaActivity = new Intent(ListaNotasActivity.this, FormularioNotaActivity.class);
-                startActivity(irParaFormularioNotaActivity);
+//                startActivity(irParaFormularioNotaActivity);
+                startActivityForResult(irParaFormularioNotaActivity, 1);
             }
         });
 
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        NotaDAO notaDAO = new NotaDAO();
-        List<Nota> todasNotas = notaDAO.todos();
+        if (requestCode == 1 && resultCode == 2 && data.hasExtra("nota")) {
+            Nota nota = (Nota) data.getSerializableExtra("nota");
 
-        configurarRecyclerView(todasNotas);
+            NotaDAO notaDAO = new NotaDAO();
+            notaDAO.insere(nota);
+
+            this.listaNotasAdapter.adicionar(nota);
+        }
     }
 
     private void configurarRecyclerView(List<Nota> listaNotas) {
@@ -54,7 +64,8 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void definirAdapter(List<Nota> listaNotas, RecyclerView listaNotasRecyclerView) {
-        listaNotasRecyclerView.setAdapter(new ListaNotasAdapter(this, listaNotas));
+        listaNotasAdapter = new ListaNotasAdapter(this, listaNotas);
+        listaNotasRecyclerView.setAdapter(listaNotasAdapter);
     }
 
     private List<Nota> mockarNotas() {

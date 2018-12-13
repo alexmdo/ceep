@@ -25,6 +25,11 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         this.listaNotas = listaNotas;
     }
 
+    public void adicionar(Nota nota) {
+        listaNotas.add(nota);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public NotaViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int posicao) {
