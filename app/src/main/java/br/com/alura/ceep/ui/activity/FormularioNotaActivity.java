@@ -1,19 +1,21 @@
 package br.com.alura.ceep.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 
 import br.com.alura.ceep.R;
-import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
 
+import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_NOTA;
+import static br.com.alura.ceep.Constantes.NotasActivity.RESULT_CODE_INSERIR_NOTA;
+
 public class FormularioNotaActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +25,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_formulario_nota_salva, menu);
+        getMenuInflater().inflate(R.menu.menu_formulario_nota_salva, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -33,15 +34,10 @@ public class FormularioNotaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_salvar_notas:
-                EditText notaTitulo = findViewById(R.id.formulario_nota_titulo);
-                EditText notaDescricao = findViewById(R.id.formulario_nota_descricao);
+                Nota nota = instanciarNovaNota();
 
-                Nota nota = new Nota(notaTitulo.getText().toString(), notaDescricao.getText().toString());
+                inserirNotaEDevolverParaIntent(nota);
 
-                Intent voltarParaListaNotasActivity = new Intent();
-                voltarParaListaNotasActivity.putExtra("nota", nota);
-
-                setResult(2, voltarParaListaNotasActivity);
                 finish();
 
                 break;
@@ -49,5 +45,20 @@ public class FormularioNotaActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void inserirNotaEDevolverParaIntent(Nota nota) {
+        Intent voltarParaListaNotasActivity = new Intent();
+        voltarParaListaNotasActivity.putExtra(EXTRA_NOTA, nota);
+
+        setResult(RESULT_CODE_INSERIR_NOTA, voltarParaListaNotasActivity);
+    }
+
+    @NonNull
+    private Nota instanciarNovaNota() {
+        EditText notaTitulo = findViewById(R.id.formulario_nota_titulo);
+        EditText notaDescricao = findViewById(R.id.formulario_nota_descricao);
+
+        return new Nota(notaTitulo.getText().toString(), notaDescricao.getText().toString());
     }
 }
