@@ -20,6 +20,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
     private Context context;
     private List<Nota> listaNotas;
+    private OnItemClickListener onItemClickListener;
 
     public ListaNotasAdapter(Context context, List<Nota> listaNotas) {
         this.context = context;
@@ -51,6 +52,10 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         return this.listaNotas.size();
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     class NotaViewHolder extends RecyclerView.ViewHolder {
 
         private TextView titulo;
@@ -64,7 +69,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, "ViewHolder Clicado", Toast.LENGTH_SHORT).show();
+                    onItemClickListener.onItemClick();
                 }
             });
         }

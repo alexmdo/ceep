@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import br.com.alura.ceep.R;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.recyclerview.adapter.ListaNotasAdapter;
+import br.com.alura.ceep.recyclerview.adapter.OnItemClickListener;
 
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_NOTA;
 import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_INSERIR_NOTA;
@@ -79,7 +81,14 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void definirAdapter(List<Nota> listaNotas, RecyclerView listaNotasRecyclerView) {
         listaNotasAdapter = new ListaNotasAdapter(this, listaNotas);
+        listaNotasAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick() {
+                Toast.makeText(ListaNotasActivity.this, "Item clicado na activity", Toast.LENGTH_SHORT).show();
+            }
+        });
         listaNotasRecyclerView.setAdapter(listaNotasAdapter);
+        
     }
 
     private List<Nota> obterTodasNotas() {
