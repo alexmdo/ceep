@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -55,11 +56,17 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         private TextView titulo;
         private TextView descricao;
 
-        public NotaViewHolder(View layout) {
-            super(layout);
+        public NotaViewHolder(View itemView) {
+            super(itemView);
 
-            titulo = layout.findViewById(R.id.item_nota_titulo);
-            descricao = layout.findViewById(R.id.item_nota_descricao);
+            titulo = itemView.findViewById(R.id.item_nota_titulo);
+            descricao = itemView.findViewById(R.id.item_nota_descricao);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, "ViewHolder Clicado", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         public void definirValoresNasViews(Nota nota) {
