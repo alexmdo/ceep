@@ -3,17 +3,16 @@ package br.com.alura.ceep.recyclerview.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Nota;
+import br.com.alura.ceep.recyclerview.adapter.listener.OnItemClickListener;
 
 
 public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder> {
@@ -60,6 +59,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
         private TextView titulo;
         private TextView descricao;
+        private Nota nota;
 
         public NotaViewHolder(View itemView) {
             super(itemView);
@@ -69,12 +69,14 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onItemClickListener.onItemClick();
+                    onItemClickListener.onItemClick(nota);
                 }
             });
         }
 
         public void definirValoresNasViews(Nota nota) {
+            this.nota = nota;
+
             titulo.setText(nota.getTitulo());
             descricao.setText(nota.getDescricao());
         }
