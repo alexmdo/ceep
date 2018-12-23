@@ -6,6 +6,7 @@ public interface Constantes {
         String EXTRA_NOTA = "nota";
         int RESULT_CODE_INSERIR_NOTA = 2;
         int REQUEST_CODE_INSERIR_NOTA = 1;
+        int REQUEST_CODE_ALTERAR_NOTA = 2;
     }
 
 }

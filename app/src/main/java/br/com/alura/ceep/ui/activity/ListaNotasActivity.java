@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.List;
 
 import br.com.alura.ceep.R;
@@ -18,6 +19,7 @@ import br.com.alura.ceep.recyclerview.adapter.ListaNotasAdapter;
 import br.com.alura.ceep.recyclerview.adapter.listener.OnItemClickListener;
 
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_NOTA;
+import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_ALTERAR_NOTA;
 import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_INSERIR_NOTA;
 import static br.com.alura.ceep.Constantes.NotasActivity.RESULT_CODE_INSERIR_NOTA;
 
@@ -58,6 +60,14 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         if (isResultadoDaInclusaoDeNota(requestCode, resultCode, data)) {
             inserirNotaEAtualizarAdapter(data);
+        } else if (requestCode == REQUEST_CODE_ALTERAR_NOTA && resultCode == RESULT_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA) && data.hasExtra("posicao")) {
+            int posicao = data.getIntExtra("posicao", -1);
+            Nota nota = (Nota) data.getSerializableExtra(EXTRA_NOTA);
+
+            NotaDAO notaDAO = new NotaDAO();
+            notaDAO.altera(posicao, nota);
+
+            this.listaNotasAdapter.alterar(posicao, nota);
         }
     }
 
@@ -83,8 +93,11 @@ public class ListaNotasActivity extends AppCompatActivity {
         listaNotasAdapter = new ListaNotasAdapter(this, listaNotas);
         listaNotasAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(Nota nota) {
-                Toast.makeText(ListaNotasActivity.this, "Nota " + nota.getTitulo() + " clicado!", Toast.LENGTH_SHORT).show();
+            public void onItemClick(Nota nota, int posicao) {
+                Intent irParaFormularioNotaActivity = new Intent(ListaNotasActivity.this, FormularioNotaActivity.class);
+                irParaFormularioNotaActivity.putExtra(EXTRA_NOTA, nota);
+                irParaFormularioNotaActivity.putExtra("posicao", posicao);
+                startActivityForResult(irParaFormularioNotaActivity, 2);
             }
         });
         listaNotasRecyclerView.setAdapter(listaNotasAdapter);

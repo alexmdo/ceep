@@ -16,11 +16,27 @@ import static br.com.alura.ceep.Constantes.NotasActivity.RESULT_CODE_INSERIR_NOT
 
 public class FormularioNotaActivity extends AppCompatActivity {
 
+    private EditText notaTituloView;
+    private EditText notaDescricaoView;
+    private int posicaoSelecionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_nota);
+
+        notaTituloView = findViewById(R.id.formulario_nota_titulo);
+        notaDescricaoView = findViewById(R.id.formulario_nota_descricao);
+
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_NOTA) && intent.hasExtra("posicao")) {
+            posicaoSelecionada = intent.getIntExtra("posicao", -1);
+
+            Nota nota = (Nota) intent.getSerializableExtra(EXTRA_NOTA);
+
+            notaTituloView.setText(nota.getTitulo());
+            notaDescricaoView.setText(nota.getDescricao());
+        }
     }
 
     @Override
@@ -36,7 +52,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
             case R.id.menu_salvar_notas:
                 Nota nota = instanciarNovaNota();
 
-                inserirNotaEDevolverParaIntent(nota);
+                criarIntentComANotaEDefinirResultado(nota);
 
                 finish();
 
@@ -47,18 +63,16 @@ public class FormularioNotaActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void inserirNotaEDevolverParaIntent(Nota nota) {
+    private void criarIntentComANotaEDefinirResultado(Nota nota) {
         Intent voltarParaListaNotasActivity = new Intent();
         voltarParaListaNotasActivity.putExtra(EXTRA_NOTA, nota);
+        voltarParaListaNotasActivity.putExtra("posicao", posicaoSelecionada);
 
         setResult(RESULT_CODE_INSERIR_NOTA, voltarParaListaNotasActivity);
     }
 
     @NonNull
     private Nota instanciarNovaNota() {
-        EditText notaTitulo = findViewById(R.id.formulario_nota_titulo);
-        EditText notaDescricao = findViewById(R.id.formulario_nota_descricao);
-
-        return new Nota(notaTitulo.getText().toString(), notaDescricao.getText().toString());
+        return new Nota(notaTituloView.getText().toString(), notaDescricaoView.getText().toString());
     }
 }
