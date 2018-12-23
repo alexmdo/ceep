@@ -1,5 +1,6 @@
 package br.com.alura.ceep.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,7 +23,6 @@ import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_POSICAO;
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_POSICAO_DEFAULT_VALUE;
 import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_ALTERAR_NOTA;
 import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_INSERIR_NOTA;
-import static br.com.alura.ceep.Constantes.NotasActivity.RESULT_CODE_INSERIR_NOTA;
 
 public class ListaNotasActivity extends AppCompatActivity {
 
@@ -59,10 +59,14 @@ public class ListaNotasActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (isResultadoDaInclusaoDeNota(requestCode, resultCode, data)) {
-            inserirNotaEAtualizarAdapter(data);
-        } else if (isResultadoDaAlteracaoDeNota(requestCode, resultCode, data)) {
-            alterarNotaEAtualizarAdapter(data);
+        if (isResultadoDaInclusaoDeNota(requestCode, data)) {
+            if (resultCode == Activity.RESULT_OK) {
+                inserirNotaEAtualizarAdapter(data);
+            }
+        } else if (isResultadoDaAlteracaoDeNota(requestCode, data)) {
+            if (resultCode == Activity.RESULT_OK) {
+                alterarNotaEAtualizarAdapter(data);
+            }
         }
     }
 
@@ -76,8 +80,8 @@ public class ListaNotasActivity extends AppCompatActivity {
         this.listaNotasAdapter.alterar(posicao, nota);
     }
 
-    private boolean isResultadoDaAlteracaoDeNota(int requestCode, int resultCode, @Nullable Intent data) {
-        return requestCode == REQUEST_CODE_ALTERAR_NOTA && resultCode == RESULT_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA) && data.hasExtra(EXTRA_POSICAO);
+    private boolean isResultadoDaAlteracaoDeNota(int requestCode, @Nullable Intent data) {
+        return requestCode == REQUEST_CODE_ALTERAR_NOTA && data.hasExtra(EXTRA_NOTA) && data.hasExtra(EXTRA_POSICAO);
     }
 
     private void inserirNotaEAtualizarAdapter(@Nullable Intent data) {
@@ -89,8 +93,8 @@ public class ListaNotasActivity extends AppCompatActivity {
         this.listaNotasAdapter.adicionar(nota);
     }
 
-    private boolean isResultadoDaInclusaoDeNota(int requestCode, int resultCode, @Nullable Intent data) {
-        return requestCode == REQUEST_CODE_INSERIR_NOTA && resultCode == RESULT_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA);
+    private boolean isResultadoDaInclusaoDeNota(int requestCode, @Nullable Intent data) {
+        return requestCode == REQUEST_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA);
     }
 
     private void configurarRecyclerView(List<Nota> listaNotas) {
@@ -108,7 +112,7 @@ public class ListaNotasActivity extends AppCompatActivity {
             }
         });
         listaNotasRecyclerView.setAdapter(listaNotasAdapter);
-        
+
     }
 
     @NonNull
