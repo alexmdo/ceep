@@ -2,14 +2,13 @@ package br.com.alura.ceep.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.List;
 
 import br.com.alura.ceep.R;
@@ -19,6 +18,8 @@ import br.com.alura.ceep.recyclerview.adapter.ListaNotasAdapter;
 import br.com.alura.ceep.recyclerview.adapter.listener.OnItemClickListener;
 
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_NOTA;
+import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_POSICAO;
+import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_POSICAO_DEFAULT_VALUE;
 import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_ALTERAR_NOTA;
 import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_INSERIR_NOTA;
 import static br.com.alura.ceep.Constantes.NotasActivity.RESULT_CODE_INSERIR_NOTA;
@@ -33,7 +34,7 @@ public class ListaNotasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_notas);
 
-        todasNotas = obterTodasNotas();
+        todasNotas = obterTodasNotasMockada();
         configurarRecyclerView(todasNotas);
 
         definirAcaoDaTextViewDeInserirNota();
@@ -60,15 +61,23 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         if (isResultadoDaInclusaoDeNota(requestCode, resultCode, data)) {
             inserirNotaEAtualizarAdapter(data);
-        } else if (requestCode == REQUEST_CODE_ALTERAR_NOTA && resultCode == RESULT_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA) && data.hasExtra("posicao")) {
-            int posicao = data.getIntExtra("posicao", -1);
-            Nota nota = (Nota) data.getSerializableExtra(EXTRA_NOTA);
-
-            NotaDAO notaDAO = new NotaDAO();
-            notaDAO.altera(posicao, nota);
-
-            this.listaNotasAdapter.alterar(posicao, nota);
+        } else if (isResultadoDaAlteracaoDeNota(requestCode, resultCode, data)) {
+            alterarNotaEAtualizarAdapter(data);
         }
+    }
+
+    private void alterarNotaEAtualizarAdapter(@Nullable Intent data) {
+        int posicao = data.getIntExtra(EXTRA_POSICAO, EXTRA_POSICAO_DEFAULT_VALUE);
+        Nota nota = (Nota) data.getSerializableExtra(EXTRA_NOTA);
+
+        NotaDAO notaDAO = new NotaDAO();
+        notaDAO.altera(posicao, nota);
+
+        this.listaNotasAdapter.alterar(posicao, nota);
+    }
+
+    private boolean isResultadoDaAlteracaoDeNota(int requestCode, int resultCode, @Nullable Intent data) {
+        return requestCode == REQUEST_CODE_ALTERAR_NOTA && resultCode == RESULT_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA) && data.hasExtra(EXTRA_POSICAO);
     }
 
     private void inserirNotaEAtualizarAdapter(@Nullable Intent data) {
@@ -94,17 +103,23 @@ public class ListaNotasActivity extends AppCompatActivity {
         listaNotasAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(Nota nota, int posicao) {
-                Intent irParaFormularioNotaActivity = new Intent(ListaNotasActivity.this, FormularioNotaActivity.class);
-                irParaFormularioNotaActivity.putExtra(EXTRA_NOTA, nota);
-                irParaFormularioNotaActivity.putExtra("posicao", posicao);
-                startActivityForResult(irParaFormularioNotaActivity, 2);
+                Intent alterarNotaIntent = gerarIntentParaFormularioComNotaEPosicao(nota, posicao);
+                startActivityForResult(alterarNotaIntent, REQUEST_CODE_ALTERAR_NOTA);
             }
         });
         listaNotasRecyclerView.setAdapter(listaNotasAdapter);
         
     }
 
-    private List<Nota> obterTodasNotas() {
+    @NonNull
+    private Intent gerarIntentParaFormularioComNotaEPosicao(Nota nota, int posicao) {
+        Intent intent = new Intent(ListaNotasActivity.this, FormularioNotaActivity.class);
+        intent.putExtra(EXTRA_NOTA, nota);
+        intent.putExtra(EXTRA_POSICAO, posicao);
+        return intent;
+    }
+
+    private List<Nota> obterTodasNotasMockada() {
         NotaDAO notaDAO = new NotaDAO();
 
         for (int i = 0; i < 10; i++) {
