@@ -101,8 +101,12 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void configurarRecyclerView(List<Nota> listaNotas) {
         RecyclerView listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
-        definirAdapter(listaNotas, listaNotasRecyclerView);
 
+        definirAdapter(listaNotas, listaNotasRecyclerView);
+        configurarRecyclerViewParaResponderAEventosDeSwipe(listaNotasRecyclerView);
+    }
+
+    private void configurarRecyclerViewParaResponderAEventosDeSwipe(RecyclerView listaNotasRecyclerView) {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NotaItemTouchHelperCallback(listaNotasAdapter));
         itemTouchHelper.attachToRecyclerView(listaNotasRecyclerView);
     }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import br.com.alura.ceep.R;
@@ -62,6 +63,11 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
     public void remover(int position) {
         listaNotas.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void trocar(int posicaoInicial, int posicaoFinal) {
+        Collections.swap(listaNotas, posicaoInicial, posicaoFinal);
         notifyDataSetChanged();
     }
 
