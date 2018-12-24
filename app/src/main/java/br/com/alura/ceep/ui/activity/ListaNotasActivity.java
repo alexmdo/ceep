@@ -39,7 +39,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         setTitle(NOTAS_TITULO_APPBAR);
 
-        todasNotas = obterTodasNotasMockada();
+        todasNotas = obterTodasNotas();
         configurarRecyclerView(todasNotas);
 
         definirAcaoDaTextViewDeInserirNota();
@@ -135,12 +135,8 @@ public class ListaNotasActivity extends AppCompatActivity {
         return intent;
     }
 
-    private List<Nota> obterTodasNotasMockada() {
+    private List<Nota> obterTodasNotas() {
         NotaDAO notaDAO = new NotaDAO();
-
-        for (int i = 0; i < 10; i++) {
-            notaDAO.insere(new Nota("Titulo " + (i + 1), "Descricao " + (i + 1)));
-        }
 
         return notaDAO.todos();
     }
