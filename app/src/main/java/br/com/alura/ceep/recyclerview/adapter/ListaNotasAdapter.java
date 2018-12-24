@@ -60,6 +60,11 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void remover(int position) {
+        listaNotas.remove(position);
+        notifyDataSetChanged();
+    }
+
     class NotaViewHolder extends RecyclerView.ViewHolder {
 
         private TextView titulo;
