@@ -34,7 +34,17 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
     public void alterar(int posicao, Nota nota) {
         listaNotas.set(posicao, nota);
-        notifyDataSetChanged();
+        notifyItemChanged(posicao);
+    }
+
+    public void remover(int position) {
+        listaNotas.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void trocar(int posicaoInicial, int posicaoFinal) {
+        Collections.swap(listaNotas, posicaoInicial, posicaoFinal);
+        notifyItemMoved(posicaoInicial, posicaoFinal);
     }
 
     @NonNull
@@ -59,16 +69,6 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-    }
-
-    public void remover(int position) {
-        listaNotas.remove(position);
-        notifyDataSetChanged();
-    }
-
-    public void trocar(int posicaoInicial, int posicaoFinal) {
-        Collections.swap(listaNotas, posicaoInicial, posicaoFinal);
-        notifyDataSetChanged();
     }
 
     class NotaViewHolder extends RecyclerView.ViewHolder {

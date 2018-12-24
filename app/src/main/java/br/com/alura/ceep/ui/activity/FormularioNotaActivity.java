@@ -17,6 +17,8 @@ import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_POSICAO_DEFAULT_V
 
 public class FormularioNotaActivity extends AppCompatActivity {
 
+    public static final String INSERE_NOTA_APPBAR_TITLE = "Insere nota";
+    public static final String ALTERA_NOTA_APPBAR_TITLE = "Altera nota";
     private EditText notaTituloView;
     private EditText notaDescricaoView;
     private int posicaoSelecionada = EXTRA_POSICAO_DEFAULT_VALUE;
@@ -26,10 +28,14 @@ public class FormularioNotaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_nota);
 
+        setTitle(INSERE_NOTA_APPBAR_TITLE);
+
         recuperarCamposFormulario();
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_NOTA)) {
+            setTitle(ALTERA_NOTA_APPBAR_TITLE);
+
             posicaoSelecionada = intent.getIntExtra(EXTRA_POSICAO, EXTRA_POSICAO_DEFAULT_VALUE);
 
             Nota nota = (Nota) intent.getSerializableExtra(EXTRA_NOTA);

@@ -28,6 +28,7 @@ import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_INSERIR_NO
 
 public class ListaNotasActivity extends AppCompatActivity {
 
+    public static final String NOTAS_TITULO_APPBAR = "Notas";
     private ListaNotasAdapter listaNotasAdapter;
     private List<Nota> todasNotas;
 
@@ -35,6 +36,8 @@ public class ListaNotasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_notas);
+
+        setTitle(NOTAS_TITULO_APPBAR);
 
         todasNotas = obterTodasNotasMockada();
         configurarRecyclerView(todasNotas);
@@ -83,7 +86,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private boolean isResultadoDaAlteracaoDeNota(int requestCode, @Nullable Intent data) {
-        return requestCode == REQUEST_CODE_ALTERAR_NOTA && data.hasExtra(EXTRA_NOTA) && data.hasExtra(EXTRA_POSICAO);
+        return data != null && requestCode == REQUEST_CODE_ALTERAR_NOTA && data.hasExtra(EXTRA_NOTA) && data.hasExtra(EXTRA_POSICAO);
     }
 
     private void inserirNotaEAtualizarAdapter(@Nullable Intent data) {
@@ -96,7 +99,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private boolean isResultadoDaInclusaoDeNota(int requestCode, @Nullable Intent data) {
-        return requestCode == REQUEST_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA);
+        return data != null && requestCode == REQUEST_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA);
     }
 
     private void configurarRecyclerView(List<Nota> listaNotas) {
