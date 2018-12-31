@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     public static final String NOTAS_TITULO_APPBAR = "Notas";
     private ListaNotasAdapter listaNotasAdapter;
     private List<Nota> todasNotas;
+    boolean isLinearLayoutEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,6 @@ public class ListaNotasActivity extends AppCompatActivity {
         configurarRecyclerView(todasNotas);
 
         definirAcaoDaTextViewDeInserirNota();
-
     }
 
     @Override
@@ -52,6 +53,32 @@ public class ListaNotasActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_lista_notas, menu);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_item_layout_linear).setVisible(isLinearLayoutEnabled);
+        menu.findItem(R.id.menu_item_layout_grid).setVisible(!isLinearLayoutEnabled);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_layout_linear:
+                isLinearLayoutEnabled = false;
+                break;
+            case R.id.menu_item_layout_grid:
+                isLinearLayoutEnabled = true;
+                break;
+        }
+
+        // necessário invocar esse método para requisitar ao sistema que o método onPrepareOptionsMenu seja invocado
+        // @see https://developer.android.com/guide/topics/ui/menus#ChangingTheMenu
+        invalidateOptionsMenu();
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void definirAcaoDaTextViewDeInserirNota() {

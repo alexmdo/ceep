@@ -12,7 +12,6 @@
         android:id="@+id/menu_item_layout_grid"
         android:title="Staggered layout"
         android:icon="@drawable/ic_action_layout_grid"
-        app:showAsAction="always"
-        android:visible="false"/>
+        app:showAsAction="always" />
 
 </menu>
