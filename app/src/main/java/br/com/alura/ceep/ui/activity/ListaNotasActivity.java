@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,8 +59,8 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menu_item_layout_linear).setVisible(isLinearLayoutEnabled);
-        menu.findItem(R.id.menu_item_layout_grid).setVisible(!isLinearLayoutEnabled);
+        menu.findItem(R.id.menu_item_layout_linear).setVisible(!isLinearLayoutEnabled);
+        menu.findItem(R.id.menu_item_layout_grid).setVisible(isLinearLayoutEnabled);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -67,12 +69,14 @@ public class ListaNotasActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_layout_linear:
-                isLinearLayoutEnabled = false;
+                isLinearLayoutEnabled = !isLinearLayoutEnabled;
                 break;
             case R.id.menu_item_layout_grid:
-                isLinearLayoutEnabled = true;
+                isLinearLayoutEnabled = !isLinearLayoutEnabled;
                 break;
         }
+
+        configurarRecyclerView(todasNotas);
 
         // necessário invocar esse método para requisitar ao sistema que o método onPrepareOptionsMenu seja invocado
         // @see https://developer.android.com/guide/topics/ui/menus#ChangingTheMenu
@@ -138,9 +142,18 @@ public class ListaNotasActivity extends AppCompatActivity {
         return data != null && requestCode == REQUEST_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA);
     }
 
+    private void alternarLayout(RecyclerView recyclerView) {
+        if (isLinearLayoutEnabled) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        } else {
+            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        }
+    }
+
     private void configurarRecyclerView(List<Nota> listaNotas) {
         RecyclerView listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
 
+        alternarLayout(listaNotasRecyclerView);
         definirAdapter(listaNotas, listaNotasRecyclerView);
         configurarRecyclerViewParaResponderAEventosDeSwipe(listaNotasRecyclerView);
     }
