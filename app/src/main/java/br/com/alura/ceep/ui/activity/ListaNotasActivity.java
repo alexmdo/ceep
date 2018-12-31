@@ -37,7 +37,6 @@ public class ListaNotasActivity extends AppCompatActivity {
     private final NotasPreferenceManager notasPreferenceManager = new NotasPreferenceManager(this);
     private ListaNotasAdapter listaNotasAdapter;
     private List<Nota> todasNotas;
-    boolean isLinearLayoutEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class ListaNotasActivity extends AppCompatActivity {
         setTitle(NOTAS_TITULO_APPBAR);
 
         todasNotas = obterTodasNotas();
-        configurarRecyclerView(todasNotas);
+        configurarRecyclerView(todasNotas, true);
 
         definirAcaoDaTextViewDeInserirNota();
     }
@@ -61,7 +60,9 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        NotasPreferenceManager.LayoutManagerEnum layoutManagerEnum = notasPreferenceManager.obterLayoutPadrao();
+        boolean isLinearLayoutEnabled = true;
+
+        NotasPreferenceManager.LayoutManagerEnum layoutManagerEnum = notasPreferenceManager.obterLayoutManager();
         switch (layoutManagerEnum) {
             case LINEAR_LAYOUT:
                 isLinearLayoutEnabled = true;
@@ -69,14 +70,12 @@ public class ListaNotasActivity extends AppCompatActivity {
             case STAGGERED_GRID_LAYOUT:
                 isLinearLayoutEnabled = false;
                 break;
-            default:
-                isLinearLayoutEnabled = true;
         }
 
         menu.findItem(R.id.menu_item_layout_linear).setVisible(!isLinearLayoutEnabled);
         menu.findItem(R.id.menu_item_layout_grid).setVisible(isLinearLayoutEnabled);
 
-        configurarRecyclerView(todasNotas);
+        configurarRecyclerView(todasNotas, isLinearLayoutEnabled);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -85,12 +84,10 @@ public class ListaNotasActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_layout_linear:
-                notasPreferenceManager.salvarLayoutPadrao(NotasPreferenceManager.LayoutManagerEnum.LINEAR_LAYOUT);
-                isLinearLayoutEnabled = !isLinearLayoutEnabled;
+                notasPreferenceManager.salvarLayoutManager(NotasPreferenceManager.LayoutManagerEnum.LINEAR_LAYOUT);
                 break;
             case R.id.menu_item_layout_grid:
-                notasPreferenceManager.salvarLayoutPadrao(NotasPreferenceManager.LayoutManagerEnum.STAGGERED_GRID_LAYOUT);
-                isLinearLayoutEnabled = !isLinearLayoutEnabled;
+                notasPreferenceManager.salvarLayoutManager(NotasPreferenceManager.LayoutManagerEnum.STAGGERED_GRID_LAYOUT);
                 break;
         }
 
@@ -158,7 +155,7 @@ public class ListaNotasActivity extends AppCompatActivity {
         return data != null && requestCode == REQUEST_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA);
     }
 
-    private void alternarLayout(RecyclerView recyclerView) {
+    private void configurarLayoutManager(RecyclerView recyclerView, boolean isLinearLayoutEnabled) {
         if (isLinearLayoutEnabled) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else {
@@ -166,10 +163,10 @@ public class ListaNotasActivity extends AppCompatActivity {
         }
     }
 
-    private void configurarRecyclerView(List<Nota> listaNotas) {
+    private void configurarRecyclerView(List<Nota> listaNotas, boolean isLinearLayoutEnabled) {
         RecyclerView listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
 
-        alternarLayout(listaNotasRecyclerView);
+        configurarLayoutManager(listaNotasRecyclerView, isLinearLayoutEnabled);
         definirAdapter(listaNotas, listaNotasRecyclerView);
         configurarRecyclerViewParaResponderAEventosDeSwipe(listaNotasRecyclerView);
     }

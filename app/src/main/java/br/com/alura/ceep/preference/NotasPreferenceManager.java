@@ -16,25 +16,25 @@ public class NotasPreferenceManager {
         this.context = context;
     }
 
-    public void salvarLayoutPadrao(LayoutManagerEnum layoutEnum) {
+    public void salvarLayoutManager(LayoutManagerEnum layoutEnum) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("br.com.alura.ceep.ui.activity.ListaNotasActivity", ListaNotasActivity.MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         edit.putString(CHAVE_LAYOUT_SELECIONADO_PREFERENCE, layoutEnum.toString());
         edit.commit();
 
-        Log.d(TAG, "salvarLayoutPadrao: layout salvo -> " + layoutEnum);
+        Log.d(TAG, "salvarLayoutManager: layout salvo -> " + layoutEnum);
     }
 
-    public LayoutManagerEnum obterLayoutPadrao() {
+    public LayoutManagerEnum obterLayoutManager() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("br.com.alura.ceep.ui.activity.ListaNotasActivity", ListaNotasActivity.MODE_PRIVATE);
         String layoutSelecionado = sharedPreferences.getString(CHAVE_LAYOUT_SELECIONADO_PREFERENCE, "");
 
         LayoutManagerEnum layoutManagerEnum = LayoutManagerEnum.LINEAR_LAYOUT;
         try {
             layoutManagerEnum = LayoutManagerEnum.valueOf(layoutSelecionado);
-            Log.d(TAG, "obterLayoutPadrao: layout obtido -> " + layoutManagerEnum);
+            Log.d(TAG, "obterLayoutManager: layout obtido -> " + layoutManagerEnum);
         } catch (Exception e) {
-            Log.d(TAG, "obterLayoutPadrao: nenhum layout padrao foi definido anteriormente. Devolvendo padrão -> " + layoutManagerEnum);
+            Log.d(TAG, "obterLayoutManager: nenhum layout padrao foi definido anteriormente. Devolvendo padrão -> " + layoutManagerEnum);
             return layoutManagerEnum;
         }
 
