@@ -20,6 +20,7 @@ import java.util.List;
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
+import br.com.alura.ceep.preference.NotasPreferenceManager;
 import br.com.alura.ceep.recyclerview.adapter.ListaNotasAdapter;
 import br.com.alura.ceep.recyclerview.adapter.listener.OnItemClickListener;
 import br.com.alura.ceep.recyclerview.helper.callback.NotaItemTouchHelperCallback;
@@ -33,6 +34,7 @@ import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_INSERIR_NO
 public class ListaNotasActivity extends AppCompatActivity {
 
     public static final String NOTAS_TITULO_APPBAR = "Notas";
+    private final NotasPreferenceManager notasPreferenceManager = new NotasPreferenceManager(this);
     private ListaNotasAdapter listaNotasAdapter;
     private List<Nota> todasNotas;
     boolean isLinearLayoutEnabled = true;
@@ -59,8 +61,22 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        NotasPreferenceManager.LayoutManagerEnum layoutManagerEnum = notasPreferenceManager.obterLayoutPadrao();
+        switch (layoutManagerEnum) {
+            case LINEAR_LAYOUT:
+                isLinearLayoutEnabled = true;
+                break;
+            case STAGGERED_GRID_LAYOUT:
+                isLinearLayoutEnabled = false;
+                break;
+            default:
+                isLinearLayoutEnabled = true;
+        }
+
         menu.findItem(R.id.menu_item_layout_linear).setVisible(!isLinearLayoutEnabled);
         menu.findItem(R.id.menu_item_layout_grid).setVisible(isLinearLayoutEnabled);
+
+        configurarRecyclerView(todasNotas);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -69,14 +85,14 @@ public class ListaNotasActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_layout_linear:
+                notasPreferenceManager.salvarLayoutPadrao(NotasPreferenceManager.LayoutManagerEnum.LINEAR_LAYOUT);
                 isLinearLayoutEnabled = !isLinearLayoutEnabled;
                 break;
             case R.id.menu_item_layout_grid:
+                notasPreferenceManager.salvarLayoutPadrao(NotasPreferenceManager.LayoutManagerEnum.STAGGERED_GRID_LAYOUT);
                 isLinearLayoutEnabled = !isLinearLayoutEnabled;
                 break;
         }
-
-        configurarRecyclerView(todasNotas);
 
         // necessário invocar esse método para requisitar ao sistema que o método onPrepareOptionsMenu seja invocado
         // @see https://developer.android.com/guide/topics/ui/menus#ChangingTheMenu
@@ -191,3 +207,4 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
 }
+
