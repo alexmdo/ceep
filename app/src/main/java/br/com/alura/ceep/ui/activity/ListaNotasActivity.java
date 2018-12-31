@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
@@ -43,6 +44,14 @@ public class ListaNotasActivity extends AppCompatActivity {
         configurarRecyclerView(todasNotas);
 
         definirAcaoDaTextViewDeInserirNota();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lista_notas, menu);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void definirAcaoDaTextViewDeInserirNota() {
