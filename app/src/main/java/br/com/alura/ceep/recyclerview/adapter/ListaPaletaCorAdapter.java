@@ -42,7 +42,7 @@ public class ListaPaletaCorAdapter extends RecyclerView.Adapter<ListaPaletaCorAd
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listaPaletaCor.size();
     }
 
     public class PaletaCorViewHolder extends RecyclerView.ViewHolder {
@@ -57,11 +57,11 @@ public class ListaPaletaCorAdapter extends RecyclerView.Adapter<ListaPaletaCorAd
 
         public void definirPaletaCor(PaletaCorEnum paletaCorEnum) {
             Drawable background = paletaCor.getBackground();
-            background.setColorFilter(Color.parseColor(paletaCorEnum.corHexadecimal), PorterDuff.Mode.DARKEN);
+            background.setColorFilter(Color.parseColor(paletaCorEnum.corHexadecimal), PorterDuff.Mode.SRC_ATOP);
         }
     }
 
-    private enum PaletaCorEnum {
+    public enum PaletaCorEnum {
 
         AZUL("#408EC9"),
         BRANCO("#FFFFFF"),

@@ -4,12 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+
+import java.util.Arrays;
+import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Nota;
+import br.com.alura.ceep.recyclerview.adapter.ListaPaletaCorAdapter;
 
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_NOTA;
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_POSICAO;
@@ -41,6 +47,19 @@ public class FormularioNotaActivity extends AppCompatActivity {
             Nota nota = (Nota) intent.getSerializableExtra(EXTRA_NOTA);
             definirValoresCamposFormulario(nota);
         }
+
+        List<ListaPaletaCorAdapter.PaletaCorEnum> listaPaletaCor = Arrays.asList(ListaPaletaCorAdapter.PaletaCorEnum.values());
+        configurarRecyclerView(listaPaletaCor);
+    }
+
+    private void configurarRecyclerView(List<ListaPaletaCorAdapter.PaletaCorEnum> listaPaletaCor) {
+        RecyclerView paletaCorRecyclerView = findViewById(R.id.formulario_nota_paleta_cor_recyclerview);
+        configurarAdapter(listaPaletaCor, paletaCorRecyclerView);
+    }
+
+    private void configurarAdapter(List<ListaPaletaCorAdapter.PaletaCorEnum> listaPaletaCor, RecyclerView paletaCorRecyclerView) {
+        ListaPaletaCorAdapter listaPaletaCorAdapter = new ListaPaletaCorAdapter(this, listaPaletaCor);
+        paletaCorRecyclerView.setAdapter(listaPaletaCorAdapter);
     }
 
     private void definirValoresCamposFormulario(Nota nota) {
