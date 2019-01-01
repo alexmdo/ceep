@@ -2,12 +2,13 @@ package br.com.alura.ceep.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 
 import java.util.Arrays;
@@ -28,6 +29,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private EditText notaTituloView;
     private EditText notaDescricaoView;
     private int posicaoSelecionada = EXTRA_POSICAO_DEFAULT_VALUE;
+    private ConstraintLayout layoutRaiz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
 
         setTitle(INSERE_NOTA_APPBAR_TITLE);
 
-        recuperarCamposFormulario();
+        extrairViewsDoLayout();
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_NOTA)) {
@@ -59,6 +61,14 @@ public class FormularioNotaActivity extends AppCompatActivity {
 
     private void configurarAdapter(List<ListaPaletaCorAdapter.PaletaCorEnum> listaPaletaCor, RecyclerView paletaCorRecyclerView) {
         ListaPaletaCorAdapter listaPaletaCorAdapter = new ListaPaletaCorAdapter(this, listaPaletaCor);
+
+        listaPaletaCorAdapter.setOnItemClickListener(new ListaPaletaCorAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(ListaPaletaCorAdapter.PaletaCorEnum paletaCorEnum) {
+                layoutRaiz.setBackgroundColor(Color.parseColor(paletaCorEnum.getCorHexadecimal()));
+            }
+        });
+
         paletaCorRecyclerView.setAdapter(listaPaletaCorAdapter);
     }
 
@@ -67,7 +77,8 @@ public class FormularioNotaActivity extends AppCompatActivity {
         notaDescricaoView.setText(nota.getDescricao());
     }
 
-    private void recuperarCamposFormulario() {
+    private void extrairViewsDoLayout() {
+        layoutRaiz = findViewById(R.id.formulario_layout_raiz);
         notaTituloView = findViewById(R.id.formulario_nota_titulo);
         notaDescricaoView = findViewById(R.id.formulario_nota_descricao);
     }

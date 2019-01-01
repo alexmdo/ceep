@@ -22,7 +22,6 @@ import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.preference.NotasPreferenceManager;
 import br.com.alura.ceep.recyclerview.adapter.ListaNotasAdapter;
-import br.com.alura.ceep.recyclerview.adapter.listener.OnItemClickListener;
 import br.com.alura.ceep.recyclerview.helper.callback.NotaItemTouchHelperCallback;
 
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_NOTA;
@@ -178,7 +177,7 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void definirAdapter(List<Nota> listaNotas, RecyclerView listaNotasRecyclerView) {
         listaNotasAdapter = new ListaNotasAdapter(this, listaNotas);
-        listaNotasAdapter.setOnItemClickListener(new OnItemClickListener() {
+        listaNotasAdapter.setOnItemClickListener(new ListaNotasAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Nota nota, int posicao) {
                 Intent alterarNotaIntent = gerarIntentParaFormularioComNotaEPosicao(nota, posicao);

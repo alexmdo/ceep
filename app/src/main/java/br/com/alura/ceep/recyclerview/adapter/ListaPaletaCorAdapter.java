@@ -18,6 +18,7 @@ public class ListaPaletaCorAdapter extends RecyclerView.Adapter<ListaPaletaCorAd
 
     private Context context;
     private List<PaletaCorEnum> listaPaletaCor;
+    private OnItemClickListener onItemClickListener;
 
     public ListaPaletaCorAdapter(Context context, List<PaletaCorEnum> listaPaletaCor) {
         this.context = context;
@@ -48,17 +49,31 @@ public class ListaPaletaCorAdapter extends RecyclerView.Adapter<ListaPaletaCorAd
     public class PaletaCorViewHolder extends RecyclerView.ViewHolder {
 
         private View paletaCor;
+        private PaletaCorEnum paletaCorEnum;
 
         public PaletaCorViewHolder(@NonNull View itemView) {
             super(itemView);
 
             paletaCor = itemView.findViewById(R.id.item_paleta_cor);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onItemClickListener.onItemClick(paletaCorEnum);
+                }
+            });
         }
 
         public void definirPaletaCor(PaletaCorEnum paletaCorEnum) {
+            this.paletaCorEnum = paletaCorEnum;
+
             Drawable background = paletaCor.getBackground();
             background.setColorFilter(Color.parseColor(paletaCorEnum.corHexadecimal), PorterDuff.Mode.SRC_ATOP);
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public enum PaletaCorEnum {
@@ -78,6 +93,15 @@ public class ListaPaletaCorAdapter extends RecyclerView.Adapter<ListaPaletaCorAd
         PaletaCorEnum(String corHexadecimal) {
             this.corHexadecimal = corHexadecimal;
         }
+
+        public String getCorHexadecimal() {
+            return corHexadecimal;
+        }
+    }
+
+    public interface OnItemClickListener {
+
+        void onItemClick(PaletaCorEnum paletaCorEnum);
 
     }
 }
