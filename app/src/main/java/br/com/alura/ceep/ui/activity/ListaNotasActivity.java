@@ -20,7 +20,7 @@ import java.util.List;
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
-import br.com.alura.ceep.preference.NotasPreferenceManager;
+import br.com.alura.ceep.preference.ListaNotasPreferenceManager;
 import br.com.alura.ceep.recyclerview.adapter.ListaNotasAdapter;
 import br.com.alura.ceep.recyclerview.helper.callback.NotaItemTouchHelperCallback;
 
@@ -33,7 +33,7 @@ import static br.com.alura.ceep.Constantes.NotasActivity.REQUEST_CODE_INSERIR_NO
 public class ListaNotasActivity extends AppCompatActivity {
 
     public static final String NOTAS_TITULO_APPBAR = "Notas";
-    private final NotasPreferenceManager notasPreferenceManager = new NotasPreferenceManager(this);
+    private final ListaNotasPreferenceManager notasPreferenceManager = new ListaNotasPreferenceManager(this);
     private ListaNotasAdapter listaNotasAdapter;
     private List<Nota> todasNotas;
 
@@ -61,7 +61,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         boolean isLinearLayoutEnabled = true;
 
-        NotasPreferenceManager.LayoutManagerEnum layoutManagerEnum = notasPreferenceManager.obterLayoutManager();
+        ListaNotasPreferenceManager.LayoutManagerEnum layoutManagerEnum = notasPreferenceManager.obterLayoutManager();
         switch (layoutManagerEnum) {
             case LINEAR_LAYOUT:
                 isLinearLayoutEnabled = true;
@@ -83,10 +83,10 @@ public class ListaNotasActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_layout_linear:
-                notasPreferenceManager.salvarLayoutManager(NotasPreferenceManager.LayoutManagerEnum.LINEAR_LAYOUT);
+                notasPreferenceManager.salvarLayoutManager(ListaNotasPreferenceManager.LayoutManagerEnum.LINEAR_LAYOUT);
                 break;
             case R.id.menu_item_layout_grid:
-                notasPreferenceManager.salvarLayoutManager(NotasPreferenceManager.LayoutManagerEnum.STAGGERED_GRID_LAYOUT);
+                notasPreferenceManager.salvarLayoutManager(ListaNotasPreferenceManager.LayoutManagerEnum.STAGGERED_GRID_LAYOUT);
                 break;
         }
 

@@ -4,30 +4,29 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import br.com.alura.ceep.ui.activity.ListaNotasActivity;
+public class ListaNotasPreferenceManager {
 
-public class NotasPreferenceManager {
-
-    public static final String CHAVE_LAYOUT_SELECIONADO_PREFERENCE = "CHAVE_LAYOUT_SELECIONADO_PREFERENCE";
-    private static final String TAG = NotasPreferenceManager.class.getCanonicalName();
+    private static final String TAG = ListaNotasPreferenceManager.class.getCanonicalName();
+    public static final String CHAVE_LAYOUT_PADRAO = "LAYOUT_PADRAO";
+    public static final String PREFERENCE_FILE_NAME = "br.com.alura.ceep.ui.activity.ListaNotasActivity";
     private Context context;
 
-    public NotasPreferenceManager(Context context) {
+    public ListaNotasPreferenceManager(Context context) {
         this.context = context;
     }
 
     public void salvarLayoutManager(LayoutManagerEnum layoutEnum) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("br.com.alura.ceep.ui.activity.ListaNotasActivity", ListaNotasActivity.MODE_PRIVATE);
-        SharedPreferences.Editor edit = sharedPreferences.edit();
-        edit.putString(CHAVE_LAYOUT_SELECIONADO_PREFERENCE, layoutEnum.toString());
-        edit.commit();
+        SharedPreferences sharedPreferences = getSharedPreferences();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(CHAVE_LAYOUT_PADRAO, layoutEnum.toString());
+        editor.commit();
 
         Log.d(TAG, "salvarLayoutManager: layout salvo -> " + layoutEnum);
     }
 
     public LayoutManagerEnum obterLayoutManager() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("br.com.alura.ceep.ui.activity.ListaNotasActivity", ListaNotasActivity.MODE_PRIVATE);
-        String layoutSelecionado = sharedPreferences.getString(CHAVE_LAYOUT_SELECIONADO_PREFERENCE, "");
+        SharedPreferences sharedPreferences = getSharedPreferences();
+        String layoutSelecionado = sharedPreferences.getString(CHAVE_LAYOUT_PADRAO, "");
 
         LayoutManagerEnum layoutManagerEnum = LayoutManagerEnum.LINEAR_LAYOUT;
         try {
@@ -39,6 +38,10 @@ public class NotasPreferenceManager {
         }
 
         return layoutManagerEnum;
+    }
+
+    private SharedPreferences getSharedPreferences() {
+        return context.getSharedPreferences(PREFERENCE_FILE_NAME, Context.MODE_PRIVATE);
     }
 
     public enum LayoutManagerEnum {
