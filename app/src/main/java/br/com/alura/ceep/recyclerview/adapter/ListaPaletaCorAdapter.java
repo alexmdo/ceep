@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.com.alura.ceep.R;
+import br.com.alura.ceep.model.PaletaCorEnum;
 
 public class ListaPaletaCorAdapter extends RecyclerView.Adapter<ListaPaletaCorAdapter.PaletaCorViewHolder> {
 
@@ -68,35 +69,12 @@ public class ListaPaletaCorAdapter extends RecyclerView.Adapter<ListaPaletaCorAd
             this.paletaCorEnum = paletaCorEnum;
 
             Drawable background = paletaCor.getBackground();
-            background.setColorFilter(Color.parseColor(paletaCorEnum.corHexadecimal), PorterDuff.Mode.SRC_ATOP);
+            background.setColorFilter(Color.parseColor(paletaCorEnum.getCorHexadecimal()), PorterDuff.Mode.SRC_ATOP);
         }
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-    }
-
-    public enum PaletaCorEnum {
-
-        AZUL("#408EC9"),
-        BRANCO("#FFFFFF"),
-        VERMELHO("#EC2F4B"),
-        VERDE("#9ACD32"),
-        AMARELO("#F9F256"),
-        LILAS("#F1CBFF"),
-        CINZA("#D2D4DC"),
-        MARROM("#A47C48"),
-        ROXO("#BE29EC");
-
-        private final String corHexadecimal;
-
-        PaletaCorEnum(String corHexadecimal) {
-            this.corHexadecimal = corHexadecimal;
-        }
-
-        public String getCorHexadecimal() {
-            return corHexadecimal;
-        }
     }
 
     public interface OnItemClickListener {

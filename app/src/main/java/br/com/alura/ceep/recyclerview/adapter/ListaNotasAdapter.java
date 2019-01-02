@@ -1,7 +1,9 @@
 package br.com.alura.ceep.recyclerview.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +76,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
         private TextView titulo;
         private TextView descricao;
+        private ConstraintLayout notaWrapper;
         private Nota nota;
 
         public NotaViewHolder(View itemView) {
@@ -81,6 +84,8 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
             titulo = itemView.findViewById(R.id.item_nota_titulo);
             descricao = itemView.findViewById(R.id.item_nota_descricao);
+            notaWrapper = itemView.findViewById(R.id.item_nota_wrapper);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -94,6 +99,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
             titulo.setText(nota.getTitulo());
             descricao.setText(nota.getDescricao());
+            notaWrapper.setBackgroundColor(Color.parseColor(nota.getPaletaCorEnum().getCorHexadecimal()));
         }
 
     }

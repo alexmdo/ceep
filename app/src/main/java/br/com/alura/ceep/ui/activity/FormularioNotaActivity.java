@@ -16,6 +16,7 @@ import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Nota;
+import br.com.alura.ceep.model.PaletaCorEnum;
 import br.com.alura.ceep.recyclerview.adapter.ListaPaletaCorAdapter;
 
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_NOTA;
@@ -30,6 +31,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private EditText notaDescricaoView;
     private int posicaoSelecionada = EXTRA_POSICAO_DEFAULT_VALUE;
     private ConstraintLayout layoutRaiz;
+    private Nota nota = new Nota();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,35 +48,37 @@ public class FormularioNotaActivity extends AppCompatActivity {
 
             posicaoSelecionada = intent.getIntExtra(EXTRA_POSICAO, EXTRA_POSICAO_DEFAULT_VALUE);
 
-            Nota nota = (Nota) intent.getSerializableExtra(EXTRA_NOTA);
-            definirValoresCamposFormulario(nota);
+            nota = (Nota) intent.getSerializableExtra(EXTRA_NOTA);
+            atribuirValoresNasViewsDoLayoutParaEdicao(nota);
         }
 
-        List<ListaPaletaCorAdapter.PaletaCorEnum> listaPaletaCor = Arrays.asList(ListaPaletaCorAdapter.PaletaCorEnum.values());
+        List<PaletaCorEnum> listaPaletaCor = Arrays.asList(PaletaCorEnum.values());
         configurarRecyclerView(listaPaletaCor);
     }
 
-    private void configurarRecyclerView(List<ListaPaletaCorAdapter.PaletaCorEnum> listaPaletaCor) {
+    private void configurarRecyclerView(List<PaletaCorEnum> listaPaletaCor) {
         RecyclerView paletaCorRecyclerView = findViewById(R.id.formulario_nota_paleta_cor_recyclerview);
         configurarAdapter(listaPaletaCor, paletaCorRecyclerView);
     }
 
-    private void configurarAdapter(List<ListaPaletaCorAdapter.PaletaCorEnum> listaPaletaCor, RecyclerView paletaCorRecyclerView) {
+    private void configurarAdapter(List<PaletaCorEnum> listaPaletaCor, RecyclerView paletaCorRecyclerView) {
         ListaPaletaCorAdapter listaPaletaCorAdapter = new ListaPaletaCorAdapter(this, listaPaletaCor);
 
         listaPaletaCorAdapter.setOnItemClickListener(new ListaPaletaCorAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(ListaPaletaCorAdapter.PaletaCorEnum paletaCorEnum) {
+            public void onItemClick(PaletaCorEnum paletaCorEnum) {
                 layoutRaiz.setBackgroundColor(Color.parseColor(paletaCorEnum.getCorHexadecimal()));
+                nota.setPaletaCorEnum(paletaCorEnum);
             }
         });
 
         paletaCorRecyclerView.setAdapter(listaPaletaCorAdapter);
     }
 
-    private void definirValoresCamposFormulario(Nota nota) {
+    private void atribuirValoresNasViewsDoLayoutParaEdicao(Nota nota) {
         notaTituloView.setText(nota.getTitulo());
         notaDescricaoView.setText(nota.getDescricao());
+        layoutRaiz.setBackgroundColor(Color.parseColor(nota.getPaletaCorEnum().getCorHexadecimal()));
     }
 
     private void extrairViewsDoLayout() {
@@ -95,7 +99,8 @@ public class FormularioNotaActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_salvar_notas:
 
-                Nota nota = new Nota(notaTituloView.getText().toString(), notaDescricaoView.getText().toString());
+                atualizarNotaComTituloEDescricao();
+
                 Intent intentComNotaEPosicao = gerarIntentComNotaEPosicao(nota, posicaoSelecionada);
                 setResult(Activity.RESULT_OK, intentComNotaEPosicao);
 
@@ -105,6 +110,11 @@ public class FormularioNotaActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void atualizarNotaComTituloEDescricao() {
+        nota.setTitulo(notaTituloView.getText().toString());
+        nota.setDescricao(notaDescricaoView.getText().toString());
     }
 
     private Intent gerarIntentComNotaEPosicao(Nota nota, int posicao) {
