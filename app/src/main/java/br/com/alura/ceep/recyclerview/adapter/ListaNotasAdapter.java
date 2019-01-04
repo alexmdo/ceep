@@ -29,8 +29,10 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
     }
 
     public void adicionar(Nota nota) {
-        listaNotas.add(0, nota);
-        notifyItemInserted(0);
+//        listaNotas.add(0, nota);
+//        notifyItemInserted(0);
+        listaNotas.add(nota.getPosicao(), nota);
+        notifyDataSetChanged();
     }
 
     public void alterar(int posicao, Nota nota) {
