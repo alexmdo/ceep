@@ -156,9 +156,14 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private void configurarLayoutManager() {
         if (isLinearLayoutAtivado()) {
-            listaNotasRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            LinearLayoutManager layout = new LinearLayoutManager(this);
+            layout.setReverseLayout(true);
+            layout.setStackFromEnd(true);
+            listaNotasRecyclerView.setLayoutManager(layout);
         } else {
-            listaNotasRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            StaggeredGridLayoutManager layout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            layout.setReverseLayout(true);
+            listaNotasRecyclerView.setLayoutManager(layout);
         }
     }
 
