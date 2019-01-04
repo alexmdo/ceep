@@ -118,6 +118,8 @@ public class NotaDAO extends SQLiteOpenHelper {
         Integer posicao = nota.getPosicao();
         notas.remove(posicao);
 
+        Log.d(TAG, "remove: nota " + nota.getTitulo() + ", posicao " + nota.getPosicao() + " removido!");
+
         decrementarPosicaoDasNotasDePosicaoSuperior(posicao);
     }
 
@@ -125,14 +127,18 @@ public class NotaDAO extends SQLiteOpenHelper {
         List<Nota> listaNotas = obterNotasSuperiorAPosicao(posicao);
         for (Nota n :
                 listaNotas) {
-            n.setPosicao(n.getPosicao() - 1);
+            int posicaoOriginal = n.getPosicao();
+            int novaPosicao = posicaoOriginal - 1;
+            n.setPosicao(novaPosicao);
             altera(n);
+
+            Log.d(TAG, "decrementarPosicaoDasNotasDePosicaoSuperior: posição da nota " + n.getTitulo() + " alterada de " + posicaoOriginal + " para " + n.getPosicao());
         }
     }
 
     private List<Nota> obterNotasSuperiorAPosicao(Integer posicao) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, null, COLUMN_POSICAO + " > ?", new String[]{posicao.toString()}, null, null, COLUMN_POSICAO + " DESC");
+        Cursor cursor = db.query(TABLE_NAME, null, COLUMN_POSICAO + " > ?", new String[]{posicao.toString()}, null, null, null);
 
         return obterListaNotasDoCursor(cursor);
     }
