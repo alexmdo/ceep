@@ -20,8 +20,6 @@ import br.com.alura.ceep.model.PaletaCorEnum;
 import br.com.alura.ceep.recyclerview.adapter.ListaPaletaCorAdapter;
 
 import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_NOTA;
-import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_POSICAO;
-import static br.com.alura.ceep.Constantes.NotasActivity.EXTRA_POSICAO_DEFAULT_VALUE;
 
 public class FormularioNotaActivity extends AppCompatActivity {
 
@@ -29,7 +27,6 @@ public class FormularioNotaActivity extends AppCompatActivity {
     public static final String ALTERA_NOTA_APPBAR_TITLE = "Altera nota";
     private EditText notaTituloView;
     private EditText notaDescricaoView;
-    private int posicaoSelecionada = EXTRA_POSICAO_DEFAULT_VALUE;
     private ConstraintLayout layoutRaiz;
     private Nota nota = new Nota();
 
@@ -45,8 +42,6 @@ public class FormularioNotaActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_NOTA)) {
             setTitle(ALTERA_NOTA_APPBAR_TITLE);
-
-            posicaoSelecionada = intent.getIntExtra(EXTRA_POSICAO, EXTRA_POSICAO_DEFAULT_VALUE);
 
             nota = (Nota) intent.getSerializableExtra(EXTRA_NOTA);
             atribuirValoresNasViewsDoLayoutParaEdicao(nota);
@@ -101,7 +96,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
 
                 atualizarNotaComTituloEDescricao();
 
-                Intent intentComNotaEPosicao = gerarIntentComNotaEPosicao(nota, posicaoSelecionada);
+                Intent intentComNotaEPosicao = gerarIntentComNota(nota);
                 setResult(Activity.RESULT_OK, intentComNotaEPosicao);
 
                 finish();
@@ -117,10 +112,9 @@ public class FormularioNotaActivity extends AppCompatActivity {
         nota.setDescricao(notaDescricaoView.getText().toString());
     }
 
-    private Intent gerarIntentComNotaEPosicao(Nota nota, int posicao) {
+    private Intent gerarIntentComNota(Nota nota) {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_NOTA, nota);
-        intent.putExtra(EXTRA_POSICAO, posicao);
 
         return intent;
     }

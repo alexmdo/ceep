@@ -1,17 +1,21 @@
 package br.com.alura.ceep.recyclerview.helper.callback;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 import br.com.alura.ceep.dao.NotaDAO;
+import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.recyclerview.adapter.ListaNotasAdapter;
 
 public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
+    private Context context;
     private ListaNotasAdapter listaNotasAdapter;
 
-    public NotaItemTouchHelperCallback(ListaNotasAdapter listaNotasAdapter) {
+    public NotaItemTouchHelperCallback(Context context, ListaNotasAdapter listaNotasAdapter) {
+        this.context = context;
         this.listaNotasAdapter = listaNotasAdapter;
     }
 
@@ -34,7 +38,11 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     private void trocarNotaDePosicao(int posicaoInicial, int posicaoFinal) {
-        new NotaDAO().troca(posicaoInicial, posicaoFinal);
+        NotaDAO dao = new NotaDAO(context);
+        Nota notaPosicaoInicial = dao.obterPorPosicao(posicaoInicial);
+        Nota notaPosicaoFinal = dao.obterPorPosicao(posicaoFinal);
+
+        dao.troca(notaPosicaoInicial, notaPosicaoFinal);
         listaNotasAdapter.trocar(posicaoInicial, posicaoFinal);
     }
 
@@ -46,7 +54,10 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     private void removerNota(int adapterPosition) {
-        new NotaDAO().remove(adapterPosition);
+        NotaDAO dao = new NotaDAO(context);
+        Nota nota = dao.obterPorPosicao(adapterPosition);
+
+        dao.remove(nota);
         listaNotasAdapter.remover(adapterPosition);
     }
 }

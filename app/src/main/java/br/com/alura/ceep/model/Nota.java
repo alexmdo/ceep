@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 public class Nota implements Serializable {
 
+    private Long id;
     private String titulo;
     private String descricao;
     private PaletaCorEnum paletaCorEnum = PaletaCorEnum.BRANCO;
+    private Integer posicao;
 
     public Nota() {}
 
@@ -37,5 +39,21 @@ public class Nota implements Serializable {
 
     public void setPaletaCorEnum(PaletaCorEnum paletaCorEnum) {
         this.paletaCorEnum = paletaCorEnum;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(Integer posicao) {
+        this.posicao = posicao;
     }
 }
