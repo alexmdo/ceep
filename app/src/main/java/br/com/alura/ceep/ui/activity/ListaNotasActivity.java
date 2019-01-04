@@ -34,6 +34,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     private final ListaNotasPreferenceManager notasPreferenceManager = new ListaNotasPreferenceManager(this);
     private ListaNotasAdapter listaNotasAdapter;
     private List<Nota> todasNotas;
+    private RecyclerView listaNotasRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +43,16 @@ public class ListaNotasActivity extends AppCompatActivity {
 
         setTitle(NOTAS_TITULO_APPBAR);
 
+        extrairViewsDoLayout();
+
         todasNotas = obterTodasNotas();
-        configurarRecyclerView(todasNotas, true);
+        configurarRecyclerView(todasNotas);
 
         definirAcaoDaTextViewDeInserirNota();
+    }
+
+    private void extrairViewsDoLayout() {
+        listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
     }
 
     @Override
@@ -57,24 +64,20 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        boolean isLinearLayoutEnabled = true;
+        boolean isLinearLayoutEnabled = isLinearLayoutAtivado();
 
-        ListaNotasPreferenceManager.LayoutManagerEnum layoutManagerEnum = notasPreferenceManager.obterLayoutManager();
-        switch (layoutManagerEnum) {
-            case LINEAR_LAYOUT:
-                isLinearLayoutEnabled = true;
-                break;
-            case STAGGERED_GRID_LAYOUT:
-                isLinearLayoutEnabled = false;
-                break;
-        }
+        configurarLayoutManager();
 
         menu.findItem(R.id.menu_item_layout_linear).setVisible(!isLinearLayoutEnabled);
         menu.findItem(R.id.menu_item_layout_grid).setVisible(isLinearLayoutEnabled);
 
-        configurarRecyclerView(todasNotas, isLinearLayoutEnabled);
-
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    private boolean isLinearLayoutAtivado() {
+        ListaNotasPreferenceManager.LayoutManagerEnum layoutManagerEnum = notasPreferenceManager.obterLayoutManager();
+
+        return layoutManagerEnum == ListaNotasPreferenceManager.LayoutManagerEnum.LINEAR_LAYOUT;
     }
 
     @Override
@@ -151,28 +154,26 @@ public class ListaNotasActivity extends AppCompatActivity {
         return data != null && requestCode == REQUEST_CODE_INSERIR_NOTA && data.hasExtra(EXTRA_NOTA);
     }
 
-    private void configurarLayoutManager(RecyclerView recyclerView, boolean isLinearLayoutEnabled) {
-        if (isLinearLayoutEnabled) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    private void configurarLayoutManager() {
+        if (isLinearLayoutAtivado()) {
+            listaNotasRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else {
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            listaNotasRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         }
     }
 
-    private void configurarRecyclerView(List<Nota> listaNotas, boolean isLinearLayoutEnabled) {
-        RecyclerView listaNotasRecyclerView = findViewById(R.id.lista_notas_recyclerview);
-
-        configurarLayoutManager(listaNotasRecyclerView, isLinearLayoutEnabled);
-        definirAdapter(listaNotas, listaNotasRecyclerView);
-        configurarRecyclerViewParaResponderAEventosDeSwipe(listaNotasRecyclerView);
+    private void configurarRecyclerView(List<Nota> listaNotas) {
+        configurarLayoutManager();
+        definirAdapter(listaNotas);
+        configurarRecyclerViewParaResponderAEventosDeSwipe();
     }
 
-    private void configurarRecyclerViewParaResponderAEventosDeSwipe(RecyclerView listaNotasRecyclerView) {
+    private void configurarRecyclerViewParaResponderAEventosDeSwipe() {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NotaItemTouchHelperCallback(this, listaNotasAdapter));
         itemTouchHelper.attachToRecyclerView(listaNotasRecyclerView);
     }
 
-    private void definirAdapter(List<Nota> listaNotas, RecyclerView listaNotasRecyclerView) {
+    private void definirAdapter(List<Nota> listaNotas) {
         listaNotasAdapter = new ListaNotasAdapter(this, listaNotas);
         listaNotasAdapter.setOnItemClickListener(new ListaNotasAdapter.OnItemClickListener() {
             @Override
