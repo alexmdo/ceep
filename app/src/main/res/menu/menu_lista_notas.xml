@@ -14,4 +14,10 @@
         android:icon="@drawable/ic_action_layout_grid"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/menu_item_feedback"
+        android:title="Feedback"
+        android:icon="@drawable/ic_action_feedback"
+        app:showAsAction="always"/>
+
 </menu>

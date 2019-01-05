@@ -89,6 +89,10 @@ public class ListaNotasActivity extends AppCompatActivity {
             case R.id.menu_item_layout_grid:
                 notasPreferenceManager.salvarLayoutManager(ListaNotasPreferenceManager.LayoutManagerEnum.STAGGERED_GRID_LAYOUT);
                 break;
+            case R.id.menu_item_feedback:
+                Intent irParaFeedbackActivity = new Intent(this, FeedbackActivity.class);
+                startActivity(irParaFeedbackActivity);
+                break;
         }
 
         // necessário invocar esse método para requisitar ao sistema que o método onPrepareOptionsMenu seja invocado

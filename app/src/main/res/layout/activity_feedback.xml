@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.FeedbackActivity">
+
+    <ImageView
+        android:id="@+id/feedback_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:src="@drawable/feedback_banner"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/feedback_deixe_feedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="#88000000"
+        android:text="Deixe o seu feedback! :)"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/feedback_banner"
+        app:layout_constraintStart_toStartOf="@id/feedback_banner"
+        app:layout_constraintTop_toTopOf="@id/feedback_banner"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/feedback_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/feedback_deixe_feedback"
+        app:layout_constraintTop_toBottomOf="@id/feedback_banner"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="E-mail"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/feedback_escreva_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/feedback_email"
+        app:layout_constraintTop_toBottomOf="@id/feedback_email"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Escreva seu feedback"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Envie dúvidas ou sugestões sobre sua experiência com o Ceep. Usaremos as informações fornecidas para aprimorar a experiência da App."
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/feedback_escreva_feedback"
+        app:layout_constraintStart_toStartOf="@id/feedback_escreva_feedback"
+        android:textSize="14sp"/>
+
+</android.support.constraint.ConstraintLayout>
